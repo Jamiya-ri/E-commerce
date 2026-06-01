@@ -1,0 +1,172 @@
+.category-page{
+  padding:25px;
+  background:#f4f7fb;
+  min-height:100vh;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.category-form-card,
+.category-table-card{
+  background:#fff;
+  border-radius:16px;
+  padding:25px;
+  margin-bottom:25px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.title-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.title-icon{
+  font-size:22px;
+  color:#fcdce5;
+}
+
+.title-box h2{
+  font-size:24px;
+  color:#222;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.category-form{
+  display:flex;
+  gap:15px;
+}
+
+.category-form input{
+  flex:1;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  outline:none;
+  font-size:15px;
+}
+
+.category-form button{
+  background:#fcdce5;
+  color:#000;
+  border:none;
+  padding:14px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:0.3s;
+}
+
+.category-form button:hover{
+  background:#4338ca;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:500px;
+  border-radius:1pc;
+}
+
+table th{
+  background:#fcdce5;
+  color:black;
+  padding:15px;
+  text-align:left;
+}
+
+table td{
+  padding:15px;
+  border-bottom:1px solid #eee;
+}
+
+table tr:hover{
+  background:#f8f9ff;
+}
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-btn{
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:0.3s;
+}
+
+.delete-btn:hover{
+  background:#dc2626;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+  .category-page{
+    padding:15px;
+  }
+
+  .category-form{
+    flex-direction:column;
+  }
+
+  .category-form button{
+    width:100%;
+    justify-content:center;
+  }
+
+  .title-box h2{
+    font-size:20px;
+  }
+
+  table th,
+  table td{
+    padding:12px;
+    font-size:14px;
+  }
+
+}
+
+@media(max-width:480px){
+
+  .category-form-card,
+  .category-table-card{
+    padding:18px;
+  }
+
+  .title-box h2{
+    font-size:18px;
+  }
+
+}

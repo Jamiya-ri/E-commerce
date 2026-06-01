@@ -1,0 +1,307 @@
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  width: 250px;
+  height: 100vh;
+
+  background: #fcdce5;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  padding: 20px;
+
+  transition: all 0.3s ease;
+
+  z-index: 1200;
+
+  overflow-y: auto;
+}
+
+/* COLLAPSED */
+.sidebar.closed {
+  width: 85px;
+}
+
+/* =========================
+   LOGO AREA
+========================= */
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 25px;
+}
+
+/* LEFT SIDE */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  text-decoration: none !important;
+
+  overflow: hidden;
+}
+
+/* TITLE */
+.logo-title {
+  font-size: 30px;
+  color: black;
+
+  font-family: "Dancing Script", cursive;
+  font-weight: bold;
+
+  white-space: nowrap;
+}
+
+/* COLLAPSED HIDE */
+.sidebar.closed .logo-title,
+.sidebar.closed .logo-link img {
+  display: none;
+}
+
+/* CENTER BUTTON */
+.sidebar.closed .logo-area {
+  justify-content: center;
+}
+
+/* =========================
+   TOGGLE BUTTON
+========================= */
+
+.toggle-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: white;
+  color: black;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+  flex-shrink: 0;
+
+  transition: 0.3s ease;
+}
+
+
+
+/* =========================
+   NAV MENU
+========================= */
+
+.nav-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* =========================
+   NAV LINKS
+========================= */
+
+.nav-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 16px;
+  margin-bottom: 12px;
+
+  border-radius: 14px;
+
+  text-decoration: none !important;
+
+  color: black ;
+
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+}
+
+/* ICON */
+.nav-link svg {
+  font-size: 18px;
+  min-width: 18px;
+
+  color: black;
+
+  transition: 0.3s ease;
+}
+
+/* WHITE EFFECT */
+.nav-link::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: white;
+
+  border-radius: 14px;
+
+  opacity: 0;
+
+  transform: scale(0.95);
+
+  transition: 0.3s ease;
+
+  z-index: -1;
+}
+
+/* HOVER */
+.nav-link:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-link:hover {
+  transform: translateX(4px);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ACTIVE */
+.nav-link.active::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-link.active {
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* COLLAPSED NAV */
+.sidebar.closed .nav-link span {
+  display: none;
+}
+
+.sidebar.closed .nav-link {
+  justify-content: center;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  /* MOBILE TOPBAR */
+  .mobile-topbar {
+    height: 65px;
+
+    background: #fcdce5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1300;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-topbar h2 {
+    margin: 0;
+
+    font-size: 26px;
+
+    color: black;
+
+    font-family: "Dancing Script", cursive;
+  }
+
+  .mobile-topbar button {
+    border: none;
+
+    background: white;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    font-size: 18px;
+
+    color: black;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    background: #fcdce5;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 12px 10px;
+
+    z-index: 1300;
+
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .mobile-menu a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    text-decoration: none;
+
+    color: black;
+
+    font-size: 13px;
+
+    transition: 0.3s ease;
+  }
+
+  .mobile-menu a svg {
+    font-size: 20px;
+  }
+
+  .mobile-menu a.active {
+    font-weight: bold;
+  }
+}

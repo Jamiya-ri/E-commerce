@@ -1,0 +1,194 @@
+body {
+    font-family: 'Dancing Script', cursive;
+}
+
+/* =========================
+   CUSTOMER NAVBAR
+========================= */
+
+.customer-navbar {
+    background-color: #fcdce5;
+}
+
+/* LOGO */
+.customer-navbar .customer-brand {
+    color: black !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+/* NAV LINKS */
+.customer-navbar .customer-link {
+    font-weight: bold;
+    color: black !important;
+    transition: color 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.customer-navbar .customer-link.sketch-hover {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    z-index: 1;
+}
+
+/* BRUSH IMAGE */
+.customer-navbar .customer-link.sketch-hover::before {
+    content: '';
+
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+
+    width: 100%;
+    height: 70%;
+
+    background: url('../assets/hover.png') center/cover no-repeat;
+
+    transform: translateY(-50%) scale(0.8);
+
+    opacity: 0;
+
+    z-index: -1;
+
+    transition: 0.4s ease;
+
+    border-radius: 4px;
+}
+
+/* HOVER */
+.customer-navbar .customer-link.sketch-hover:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.customer-navbar .customer-link.sketch-hover:hover {
+    color: white !important;
+}
+
+/* ACTIVE LINK */
+.customer-navbar .customer-active {
+    color: white !important;
+}
+
+/* ACTIVE BACKGROUND */
+.customer-navbar .customer-active::before {
+    opacity: 1 !important;
+    transform: translateY(-50%) scale(1) !important;
+}
+
+/* ACTIVE BRUSH */
+.customer-navbar .customer-active::before {
+    content: '';
+
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+
+    width: 100%;
+    height: 70%;
+
+    background: url('../assets/hover.png') center/cover no-repeat;
+
+    transform: translateY(-50%) scale(1);
+
+    opacity: 1;
+
+    z-index: -1;
+
+    border-radius: 4px;
+}
+
+/* DROPDOWN */
+.customer-navbar .customer-dropdown {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
+    background-color: #fcdce5 !important;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 10px;
+}
+
+/* DROPDOWN ITEMS */
+.customer-navbar .customer-dropdown-item {
+    color: black;
+
+    padding: 8px 15px;
+
+    border-radius: 6px;
+
+    transition: 0.3s;
+
+    text-decoration: none;
+}
+
+/* DROPDOWN HOVER */
+.customer-navbar .customer-dropdown-item:hover {
+    background: url('../assets/hover.png') center/cover no-repeat;
+
+    color: white;
+}
+
+/* ACTIVE DROPDOWN */
+.customer-navbar .customer-dropdown-item.active,
+.customer-navbar .customer-dropdown-item:active {
+    background: url('../assets/hover.png') center/cover no-repeat !important;
+
+    color: white !important;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+
+    .customer-navbar .navbar-collapse {
+        background: #fcdce5;
+
+        padding: 15px;
+
+        border-radius: 10px;
+
+        margin-top: 10px;
+    }
+
+    .customer-navbar .nav-item {
+        margin-bottom: 10px;
+    }
+
+    .customer-navbar .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+.customer-navbar a {
+    text-decoration: none !important;
+}
+/* PROFILE AVATAR */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+    font-size: 18px;
+
+    cursor: pointer;
+
+    margin-top: 5px;
+}
+
+/* GAP BETWEEN AVATAR & DROPDOWN */
+.customer-navbar .dropdown-menu .customer-dropdown-item {
+    margin-top: 12px !important;
+}

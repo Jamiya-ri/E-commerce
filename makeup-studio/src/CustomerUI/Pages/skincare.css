@@ -1,0 +1,263 @@
+
+
+
+.skincare-hero{
+     min-height: 100vh;
+
+    background-image:
+    /* linear-gradient(
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.75)
+    ), */
+    url("../assets/skincare.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    overflow: hidden;
+    padding: 120px 20px 100px;
+
+
+    
+    position: relative;
+}
+
+
+
+/* GLOW */
+.glow-circle{
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+}
+
+.glow-1 {
+    top: 20%;
+    left: 10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 192, 203, 0.1);
+}
+
+.glow-2 {
+    bottom: 15%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 182, 193, 0.1);
+}
+
+.floating-leaves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.leaf {
+    position: absolute;
+    width: 20px;
+    height: 12px;
+    background: #f8cdd8;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.7;
+    animation: fall 10s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10%) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Leaf Position and Animation Delay */
+.leaf-1 { left: 5%; animation-delay: 0s; }
+.leaf-2 { left: 20%; animation-delay: 2s; }
+.leaf-3 { left: 35%; animation-delay: 4s; }
+.leaf-4 { left: 50%; animation-delay: 1s; }
+.leaf-5 { left: 65%; animation-delay: 3s; }
+.leaf-6 { left: 80%; animation-delay: 5s; }
+.leaf-7 { left: 45%; animation-delay: 6s; }
+.leaf-8 { left: 75%; animation-delay: 7s; }
+
+/* Wavy Divider */
+.wave-divider {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 1;
+}
+
+.wave-divider svg {
+    display: block;
+    width: 100%;
+    height: 100px;
+}
+
+@media (max-width: 768px) {
+    .wave-divider svg {
+        height: 60px;
+    }
+}
+
+
+/* PRODUCT CARD */
+.skinproduct-card{
+    background-color: white !important;
+    border-radius: 25px !important;
+    overflow: hidden;
+    transition: 0.4s;
+    height: 100%;
+}
+
+.skinproduct-card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+/* IMAGE */
+.skinproduct-img-wrapper{
+    position: relative;
+    overflow: hidden;
+}
+
+.skinproduct-img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.skinproduct-card:hover .skinproduct-img{
+    transform: scale(1.08);
+}
+
+/* WISHLIST */
+.skinwishlist-btn{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: white;
+    color: #f78da7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CONTENT */
+.skinproduct-content{
+    padding: 20px;
+}
+
+/* RATING */
+.skinrating{
+    color: gold;
+    margin-bottom: 10px;
+}
+
+/* PRICE */
+.skinprice{
+  color: #f78da7;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* CART BUTTON */
+.skincart-btn{
+  width: 100%;
+    background: black;
+    color: #fcdce5;
+    border: none;
+    padding: 12px;
+    border-radius: 40px;
+    font-weight: 600;
+    transition: 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.skincart-btn:hover{
+    background: #f8b6c8;
+    color: black;
+}
+
+/* RESPONSIVE */
+@media(max-width:991px){
+
+    .skincare-hero{
+        text-align: center;
+        padding-top: 140px;
+    }
+
+    
+}
+
+@media(max-width:768px){
+
+    .skinproduct-img{
+        height: 240px;
+    }
+
+    .wave-divider svg{
+        height: 60px;
+    }
+
+    .skincare-hero h1{
+        font-size: 2.5rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

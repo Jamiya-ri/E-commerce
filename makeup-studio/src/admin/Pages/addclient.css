@@ -1,0 +1,56 @@
+.client-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: #f5f7fb;
+}
+
+.client-card {
+  background: #000;
+  padding: 30px;
+  width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.client-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.client-form input,
+.client-form select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.client-form input:focus,
+.client-form select:focus {
+  border-color: #fcdce5;
+}
+
+.client-form button {
+  padding: 12px;
+  background: #fcdce5;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.client-form button:hover {
+  background: #fcdce5;
+}

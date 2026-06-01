@@ -1,0 +1,231 @@
+
+
+/* Hero Section */
+.about-section{
+    min-height: 100vh;
+
+    background-image:
+    /* linear-gradient(
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.75)
+
+    ), */
+    url("../assets/about.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    overflow: hidden;
+    padding: 120px 20px 100px;
+
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: 0 10px;
+        text-align: center;
+    }
+}
+
+/* Glow Circles */
+.glow-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+}
+
+.glow-1 {
+    top: 20%;
+    left: 10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 192, 203, 0.1);
+}
+
+.glow-2 {
+    bottom: 15%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 182, 193, 0.1);
+}
+
+/* Floating Leaves */
+.floating-leaves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.leaf {
+    position: absolute;
+    width: 20px;
+    height: 12px;
+    background: #f8cdd8;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.7;
+    animation: fall 10s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10%) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Leaf Position and Animation Delay */
+.leaf-1 { left: 5%; animation-delay: 0s; }
+.leaf-2 { left: 20%; animation-delay: 2s; }
+.leaf-3 { left: 35%; animation-delay: 4s; }
+.leaf-4 { left: 50%; animation-delay: 1s; }
+.leaf-5 { left: 65%; animation-delay: 3s; }
+.leaf-6 { left: 80%; animation-delay: 5s; }
+.leaf-7 { left: 45%; animation-delay: 6s; }
+.leaf-8 { left: 75%; animation-delay: 7s; }
+
+/* Wavy Divider */
+.wave-divider {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 1;
+}
+
+.wave-divider svg {
+    display: block;
+    width: 100%;
+    height: 100px;
+}
+
+@media (max-width: 768px) {
+    .wave-divider svg {
+        height: 60px;
+    }
+}
+
+
+
+
+/* Responsive fix for FaceFloat image */
+.col-lg-6 img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Better padding for hero text */
+@media (max-width: 768px) {
+    .about-section .col-lg-6 {
+        padding: 20px 10px;
+    }
+
+    .about-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .about-section p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+/* FLIP CARD */
+.flip-card{
+    background: transparent;
+    width: 100%;
+    height: 350px;
+    perspective: 1000px;
+}
+
+/* INNER */
+.flip-card-inner{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* FLIP EFFECT */
+.flip-card:hover .flip-card-inner{
+    transform: rotateY(180deg);
+}
+
+/* FRONT & BACK */
+.flip-card-front,
+.flip-card-back{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* FRONT IMAGE */
+.flip-card-front img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* BACK SIDE */
+.flip-card-back{
+    background: black;
+    color: #fcdce5;
+    transform: rotateY(180deg);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px;
+    text-align: center;
+}
+
+/* TITLE */
+.flip-card-back h4{
+    color: #f8b6c8;
+    font-family: "Dancing Script", cursive;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+/* TEXT */
+.flip-card-back p{
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+    .flip-card{
+        height: 300px;
+    }
+
+    .flip-card-back h4{
+        font-size: 1.7rem;
+    }
+}
