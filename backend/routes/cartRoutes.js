@@ -4,13 +4,13 @@ const router = express.Router();
 
 const Cart = require("../models/Cart");
 
-const authCustomer = require("../middleware/authCustomer");
+const authMiddleware = require("../middleware/authMiddleware");
 
 /* =========================
    ADD TO CART
 ========================= */
 
-router.post("/add", authCustomer, async (req, res) => {
+router.post("/add", authMiddleware, async (req, res) => {
   try {
     const { productId } = req.body;
 
@@ -50,7 +50,7 @@ router.post("/add", authCustomer, async (req, res) => {
    GET USER CART
 ========================= */
 
-router.get("/", authCustomer, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const cart = await Cart.find({
       userId: req.user.id,
@@ -70,7 +70,7 @@ router.get("/", authCustomer, async (req, res) => {
 
 router.delete(
   "/:id",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
     try {
 
@@ -99,7 +99,7 @@ router.delete(
 
 router.put(
   "/increase/:id",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
 
     try {
@@ -132,7 +132,7 @@ router.put(
 
 router.put(
   "/decrease/:id",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
 
     try {

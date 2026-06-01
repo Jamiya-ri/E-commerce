@@ -51,6 +51,34 @@ const orderSchema = new mongoose.Schema(
 
       default: "Pending",
     },
+customerName: {
+  type: String,
+},
+
+phone: {
+  type: String,
+},
+
+address: {
+  type: String,
+},
+
+city: {
+  type: String,
+},
+
+pincode: {
+  type: String,
+},
+
+paymentMethod: {
+  type: String,
+},
+
+notes: {
+  type: String,
+},
+
   },
 
   {

@@ -5,96 +5,195 @@ const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 const User = require("../models/User");
 
-const authCustomer = require("../middleware/authCustomer");
+const authMiddleware = require("../middleware/authMiddleware");
 
 /* =========================
    CHECKOUT ALL CART PRODUCTS
 ========================= */
-router.post("/checkout", authCustomer, async (req, res) => {
-  try {
-    const cartItems = await Cart.find({
-      userId: req.user.id,
-    }).populate("productId");
 
-    if (!cartItems.length) {
-      return res.status(400).json({
-        message: "Cart empty",
+router.post(
+  "/checkout",
+  authMiddleware,
+  async (req, res) => {
+
+    try {
+
+      const {
+        customerName,
+        phone,
+        address,
+        paymentMethod,
+        city,
+        pincode,
+        notes,
+      } = req.body;
+
+      const cartItems =
+        await Cart.find({
+          userId: req.user.id,
+        }).populate("productId");
+
+      if (!cartItems.length) {
+
+        return res.status(400).json({
+          message: "Cart empty",
+        });
+
+      }
+
+      const user =
+        await User.findById(req.user.id);
+
+      // =========================
+      // GROUP PRODUCTS BY VENDOR
+      // =========================
+      const grouped = {};
+
+      cartItems.forEach((item) => {
+
+        const vendorId =
+          item.productId.vendorId.toString();
+
+        if (!grouped[vendorId]) {
+
+          grouped[vendorId] = {
+            vendorId,
+            shopName:
+              item.productId.shopName,
+            products: [],
+            totalAmount: 0,
+          };
+
+        }
+
+        grouped[vendorId].products.push({
+
+          productId:
+            item.productId._id,
+
+          quantity:
+            item.quantity,
+
+        });
+
+        grouped[vendorId].totalAmount +=
+          item.productId.price *
+          item.quantity;
+
       });
-    }
 
-    const user = await User.findById(req.user.id);
+      // =========================
+      // CREATE MULTIPLE ORDERS
+      // =========================
+      const createdOrders = [];
 
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
+      for (const vendor in grouped) {
+
+        const data =
+          grouped[vendor];
+
+        const customOrderId =
+          `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        const order =
+          await Order.create({
+
+            orderId:
+              customOrderId,
+
+            userId:
+              req.user.id,
+
+            customerName:
+              customerName ||
+              user.name,
+
+            phone,
+
+            address,
+
+            city,
+
+            pincode,
+
+            paymentMethod,
+
+            notes,
+
+            products:
+              data.products,
+
+            totalAmount:
+              data.totalAmount,
+
+            status:
+              "Pending",
+
+            vendorId:
+              data.vendorId,
+
+            shopName:
+              data.shopName,
+
+          });
+
+        createdOrders.push(order);
+
+      }
+
+      // =========================
+      // CLEAR CART
+      // =========================
+      await Cart.deleteMany({
+        userId: req.user.id,
       });
+
+      res.json({
+
+        message:
+          "Orders placed successfully",
+
+        orders:
+          createdOrders,
+
+      });
+
+    } catch (err) {
+
+      console.log(
+        "CHECKOUT ERROR:",
+        err
+      );
+
+      res.status(500).json({
+        message:
+          "Checkout error",
+      });
+
     }
-
-    // TOTAL AMOUNT
-    const totalAmount = cartItems.reduce(
-      (acc, item) =>
-        acc + item.productId.price * item.quantity,
-      0
-    );
-
-    // PRODUCTS ARRAY
-    const products = cartItems.map((item) => ({
-      productId: item.productId._id,
-      quantity: item.quantity,
-    }));
-
-    const customOrderId = `ORD-${Date.now()}`;
-
-    const order = await Order.create({
-      orderId: customOrderId,
-
-      userId: req.user.id,
-
-      customerName: user.name,
-
-      products,
-
-      totalAmount,
-
-      status: "Pending",
-
-      vendorId:
-        cartItems[0]?.productId?.vendorId,
-
-      shopName:
-        cartItems[0]?.productId?.shopName,
-    });
-
-    // CLEAR CART
-    await Cart.deleteMany({
-      userId: req.user.id,
-    });
-
-    res.json({
-      message: "Order placed successfully",
-      order,
-    });
-
-  } catch (err) {
-
-    console.log("CHECKOUT ERROR:", err);
-
-    res.status(500).json({
-      message: "Checkout error",
-    });
 
   }
-});
+);
 
 /* =========================
    ORDER SINGLE PRODUCT
 ========================= */
 router.post(
   "/single-order/:cartId",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
-
+ 
     try {
+
+      const {
+        customerName,
+        phone,
+        address,
+        city,
+        pincode,
+        paymentMethod,
+        notes,
+      } = req.body;
 
       const cartItem =
         await Cart.findById(
@@ -127,7 +226,19 @@ router.post(
           userId: req.user.id,
 
           customerName:
-            user?.name || "Unknown",
+            customerName || user?.name || "Unknown",
+
+          phone,
+
+          address,
+
+          city,
+
+          pincode,
+
+          paymentMethod,
+
+          notes,
 
           products: [
             {

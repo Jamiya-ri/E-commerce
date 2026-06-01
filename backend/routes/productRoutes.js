@@ -1,34 +1,54 @@
 const express = require("express");
+
 const router = express.Router();
+
 const fs = require("fs");
+
 const path = require("path");
 
 const Product = require("../models/Products");
+
 const Client = require("../models/Client");
 
 const upload = require("../middleware/Uploads");
-const authClient = require("../middleware/authClient");
+
+const authMiddleware = require("../middleware/authMiddleware");
 
 /* =========================
    ADD PRODUCT
 ========================= */
 router.post(
   "/add",
-  authClient,
+  authMiddleware,
   upload.single("image"),
   async (req, res) => {
 
     try {
 
       // =========================
-      // GET LOGGED CLIENT
+      // ONLY CLIENT
       // =========================
-const client = await Client.findById(req.user.id);
+      if (req.user.role !== "client") {
+
+        return res.status(403).json({
+          message: "Only client can add product",
+        });
+
+      }
+
+      // =========================
+      // FIND CLIENT
+      // =========================
+      const client = await Client.findById(
+        req.user.id
+      );
 
       if (!client) {
+
         return res.status(404).json({
           message: "Client not found",
         });
+
       }
 
       // =========================
@@ -38,7 +58,8 @@ const client = await Client.findById(req.user.id);
 
         name: req.body.name,
 
-        category: req.body.category?.toLowerCase(),
+        category:
+          req.body.category?.toLowerCase(),
 
         price: req.body.price,
 
@@ -48,15 +69,13 @@ const client = await Client.findById(req.user.id);
 
         status: req.body.status,
 
-        description: req.body.description,
+        description:
+          req.body.description,
 
         image: req.file
           ? `http://localhost:5000/uploads/${req.file.filename}`
           : "",
 
-        // =========================
-        // VENDOR DETAILS
-        // =========================
         vendorId: client._id,
 
         shopName: client.shopName,
@@ -66,7 +85,8 @@ const client = await Client.findById(req.user.id);
       // =========================
       // CREATE PRODUCT
       // =========================
-      const product = await Product.create(productData);
+      const product =
+        await Product.create(productData);
 
       res.status(201).json(product);
 
@@ -95,10 +115,14 @@ router.get("/", async (req, res) => {
     let filter = {};
 
     if (category) {
-      filter.category = category.toLowerCase();
+
+      filter.category =
+        category.toLowerCase();
+
     }
 
-    const products = await Product.find(filter);
+    const products =
+      await Product.find(filter);
 
     res.json(products);
 
@@ -117,39 +141,82 @@ router.get("/", async (req, res) => {
 /* =========================
    CLIENT MY PRODUCTS
 ========================= */
-router.get("/my-products", authClient , async (req, res) => {
-  try {
+router.get(
+  "/my-products",
+  authMiddleware,
+  async (req, res) => {
 
-    const products = await Product.find({
-      vendorId: req.user.id,
-    });
+    try {
 
-    res.json(products);
+      // =========================
+      // ONLY CLIENT
+      // =========================
+      if (req.user.role !== "client") {
 
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Error fetching products",
-    });
+        return res.status(403).json({
+          message: "Access denied",
+        });
+
+      }
+
+      const products =
+        await Product.find({
+
+          vendorId: req.user.id,
+
+        });
+
+      res.json(products);
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        message: "Error fetching products",
+      });
+
+    }
+
   }
-});
+);
 
 /* =========================
    UPDATE PRODUCT
 ========================= */
 router.put(
   "/:id",
+  authMiddleware,
   upload.single("image"),
   async (req, res) => {
 
     try {
 
-      const product = await Product.findById(req.params.id);
+      const product =
+        await Product.findById(
+          req.params.id
+        );
 
       if (!product) {
+
         return res.status(404).json({
           message: "Product not found",
         });
+
+      }
+
+      // =========================
+      // ONLY OWNER CLIENT
+      // =========================
+      if (
+        req.user.role !== "client" ||
+        product.vendorId.toString() !== req.user.id
+      ) {
+
+        return res.status(403).json({
+          message: "Unauthorized",
+        });
+
       }
 
       // =========================
@@ -171,19 +238,27 @@ router.put(
             oldImageName
           );
 
-          fs.unlink(oldImagePath, (err) => {
-            if (err) {
-              console.log(
-                "Old image delete error:",
-                err.message
-              );
+          fs.unlink(
+            oldImagePath,
+            (err) => {
+
+              if (err) {
+
+                console.log(
+                  "Old image delete error:",
+                  err.message
+                );
+
+              }
+
             }
-          });
+          );
 
         }
 
         imageUrl =
           `http://localhost:5000/uploads/${req.file.filename}`;
+
       }
 
       // =========================
@@ -193,7 +268,8 @@ router.put(
 
         name: req.body.name,
 
-        category: req.body.category?.toLowerCase(),
+        category:
+          req.body.category?.toLowerCase(),
 
         price: req.body.price,
 
@@ -203,14 +279,15 @@ router.put(
 
         status: req.body.status,
 
-        description: req.body.description,
+        description:
+          req.body.description,
 
         image: imageUrl,
 
       };
 
       // =========================
-      // UPDATE DATABASE
+      // UPDATE
       // =========================
       const updatedProduct =
         await Product.findByIdAndUpdate(
@@ -240,104 +317,107 @@ router.put(
 /* =========================
    DELETE PRODUCT
 ========================= */
-router.delete("/:id", async (req, res) => {
+router.delete(
+  "/:id",
+  authMiddleware,
+  async (req, res) => {
 
-  try {
+    try {
 
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
-    }
-
-    // =========================
-    // DELETE IMAGE
-    // =========================
-    if (product.image) {
-
-      const imageName =
-        product.image.split("/uploads/")[1];
-
-      if (imageName) {
-
-        const imagePath = path.join(
-          __dirname,
-          "..",
-          "uploads",
-          imageName
+      const product =
+        await Product.findById(
+          req.params.id
         );
 
-        fs.unlink(imagePath, (err) => {
+      if (!product) {
 
-          if (err) {
-            console.log(
-              "Image delete error:",
-              err.message
-            );
-          }
-
+        return res.status(404).json({
+          message: "Product not found",
         });
 
       }
 
+      // =========================
+      // ONLY OWNER CLIENT
+      // =========================
+      if (
+        req.user.role !== "client" ||
+        product.vendorId.toString() !== req.user.id
+      ) {
+
+        return res.status(403).json({
+          message: "Unauthorized",
+        });
+
+      }
+
+      // =========================
+      // DELETE IMAGE
+      // =========================
+      if (product.image) {
+
+        const imageName =
+          product.image.split("/uploads/")[1];
+
+        if (imageName) {
+
+          const imagePath = path.join(
+            __dirname,
+            "..",
+            "uploads",
+            imageName
+          );
+
+          fs.unlink(
+            imagePath,
+            (err) => {
+
+              if (err) {
+
+                console.log(
+                  "Image delete error:",
+                  err.message
+                );
+
+              }
+
+            }
+          );
+
+        }
+
+      }
+
+      // =========================
+      // DELETE PRODUCT
+      // =========================
+      await Product.findByIdAndDelete(
+        req.params.id
+      );
+
+      res.json({
+        message:
+          "Product deleted successfully",
+      });
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        message: "Error deleting product",
+      });
+
     }
 
-    // =========================
-    // DELETE PRODUCT
-    // =========================
-    await Product.findByIdAndDelete(req.params.id);
-
-    res.json({
-      message: "Product deleted successfully",
-    });
-
-  } catch (err) {
-
-    console.log(err);
-
-    res.status(500).json({
-      message: "Error deleting product",
-    });
-
   }
+);
 
-});
-
-
-//category 
-router.get("/", async (req, res) => {
-
-  try {
-
-    const { category } = req.query;
-
-    let filter = {};
-
-    if (category) {
-      filter.category = category;
-    }
-
-    const products = await Product.find(filter);
-
-    res.json(products);
-
-  } catch (err) {
-
-    res.status(500).json({
-      message: "Error fetching products",
-    });
-
-  }
-
-});
-// ======================================
-// GET UNIQUE CATEGORIES
-// ======================================
+/* =========================
+   GET UNIQUE CATEGORIES
+========================= */
 router.get(
   "/categories/list",
-
   async (req, res) => {
 
     try {
@@ -345,13 +425,13 @@ router.get(
       const products =
         await Product.find();
 
-      // UNIQUE CATEGORY
-      const categories =
-        [...new Set(
+      const categories = [
+        ...new Set(
           products.map(
             (item) => item.category
           )
-        )];
+        ),
+      ];
 
       res.json(categories);
 
@@ -360,7 +440,8 @@ router.get(
       console.log(err);
 
       res.status(500).json({
-        message: "Category fetch failed",
+        message:
+          "Category fetch failed",
       });
 
     }

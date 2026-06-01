@@ -93,10 +93,21 @@ router.post(
       );
 
       // =========================
+      // CLEAR OLD COOKIES
+      // =========================
+      res.clearCookie(
+        "clientToken"
+      );
+
+      res.clearCookie(
+        "customerToken"
+      );
+
+      // =========================
       // SAVE COOKIE
       // =========================
       res.cookie(
-        "token",
+        "adminToken",
         token,
         {
 
@@ -166,7 +177,7 @@ router.get(
     try {
 
       const token =
-        req.cookies.token;
+        req.cookies.adminToken;
 
       // =========================
       // NO TOKEN
@@ -247,8 +258,19 @@ router.post(
   "/logout",
   (req, res) => {
 
+    // =========================
+    // CLEAR ALL TOKENS
+    // =========================
     res.clearCookie(
-      "token"
+      "adminToken"
+    );
+
+    res.clearCookie(
+      "clientToken"
+    );
+
+    res.clearCookie(
+      "customerToken"
     );
 
     res.json({

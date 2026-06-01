@@ -4,8 +4,6 @@ const router = express.Router();
 
 const Order = require("../models/Order");
 
-const authClient =
-  require("../middleware/authClient");
 const authMiddleware = require("../middleware/authMiddleware");
 
   
@@ -16,7 +14,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 router.get(
   "/my-orders",
-  authClient,
+  authMiddleware,
   async (req, res) => {
 
     try {
@@ -128,7 +126,7 @@ router.get(
 
 router.put(
   "/:id",
-  authClient,
+  authMiddleware,
   async (req, res) => {
 
     try {

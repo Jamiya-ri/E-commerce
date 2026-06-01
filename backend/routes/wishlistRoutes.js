@@ -4,8 +4,8 @@ const router = express.Router();
 
 const Wishlist = require("../models/Wishlist");
 
-const authCustomer = require(
-  "../middleware/authCustomer"
+const authMiddleware = require(
+  "../middleware/authMiddleware"
 );
 
 /* =========================
@@ -14,7 +14,7 @@ const authCustomer = require(
 
 router.post(
   "/add",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
 
     try {
@@ -68,7 +68,7 @@ router.post(
 
 router.get(
   "/",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
 
     try {
@@ -100,7 +100,7 @@ router.get(
 
 router.delete(
   "/:id",
-  authCustomer,
+  authMiddleware,
   async (req, res) => {
 
     try {

@@ -67,4 +67,65 @@ router.get("/", async (req, res) => {
   }
 });
 
+/* =========================
+   DELETE CATEGORY
+========================= */
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  async (req, res) => {
+
+    try {
+
+      const category =
+        await Category.findById(
+          req.params.id
+        );
+
+      if (!category) {
+
+        return res.status(404).json({
+          message:
+            "Category not found",
+        });
+
+      }
+
+      // DELETE PRODUCTS
+      await Product.deleteMany({
+
+        category:
+          category.name.toLowerCase(),
+
+      });
+
+      // DELETE CATEGORY
+      await Category.findByIdAndDelete(
+        req.params.id
+      );
+
+      res.json({
+
+        message:
+          "Category and products deleted successfully",
+
+      });
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+
+        message:
+          "Delete failed",
+
+      });
+
+    }
+
+  }
+);
+
 module.exports = router;

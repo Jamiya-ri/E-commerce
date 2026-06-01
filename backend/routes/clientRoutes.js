@@ -10,8 +10,8 @@ const Client = require("../models/Client");
 
 const Product = require("../models/Products");
 
-const authClient = require(
-  "../middleware/authClient"
+const authMiddleware = require(
+  "../middleware/authMiddleware"
 );
 
 const isAdmin = require(
@@ -25,7 +25,7 @@ const JWT_SECRET = "secretkey";
 ========================================= */
 router.post(
   "/create",
-  authClient,
+  authMiddleware,
   isAdmin,
   async (req, res) => {
 
@@ -49,8 +49,10 @@ router.post(
       ) {
 
         return res.status(400).json({
+
           message:
             "All fields are required",
+
         });
 
       }
@@ -66,8 +68,10 @@ router.post(
       if (existingClient) {
 
         return res.status(400).json({
+
           message:
             "Client already exists",
+
         });
 
       }
@@ -121,8 +125,10 @@ router.post(
       console.log(err);
 
       return res.status(500).json({
+
         message:
           "Error creating client",
+
       });
 
     }
@@ -135,7 +141,7 @@ router.post(
 ========================================= */
 router.get(
   "/",
-  authClient,
+  authMiddleware,
   isAdmin,
   async (req, res) => {
 
@@ -157,8 +163,10 @@ router.get(
       );
 
       res.status(500).json({
+
         message:
           "Error fetching clients",
+
       });
 
     }
@@ -189,8 +197,10 @@ router.post(
       ) {
 
         return res.status(400).json({
+
           message:
             "User ID and password required",
+
         });
 
       }
@@ -206,8 +216,10 @@ router.post(
       if (!client) {
 
         return res.status(400).json({
+
           message:
             "Client not found",
+
         });
 
       }
@@ -224,8 +236,10 @@ router.post(
       if (!isMatch) {
 
         return res.status(400).json({
+
           message:
             "Invalid password",
+
         });
 
       }
@@ -252,6 +266,17 @@ router.post(
           expiresIn: "7d",
         }
 
+      );
+
+      // =========================
+      // CLEAR OLD COOKIES
+      // =========================
+      res.clearCookie(
+        "adminToken"
+      );
+
+      res.clearCookie(
+        "customerToken"
       );
 
       // =========================
@@ -314,8 +339,10 @@ router.post(
       console.log(err);
 
       res.status(500).json({
+
         message:
           "Login error",
+
       });
 
     }
@@ -328,7 +355,7 @@ router.post(
 ========================================= */
 router.get(
   "/me",
-  authClient,
+  authMiddleware,
   async (req, res) => {
 
     try {
@@ -336,12 +363,24 @@ router.get(
       // =========================
       // CHECK ROLE
       // =========================
-      if (!req.user || req.user.role !== "client") {
-  return res.status(403).json({
-    message: "Access denied",
-  });
-}
-console.log("CLIENT /me USER:", req.user);
+      if (
+        !req.user ||
+        req.user.role !== "client"
+      ) {
+
+        return res.status(403).json({
+
+          message:
+            "Access denied",
+
+        });
+
+      }
+
+      console.log(
+        "CLIENT /me USER:",
+        req.user
+      );
 
       const client =
         await Client.findById(
@@ -351,8 +390,10 @@ console.log("CLIENT /me USER:", req.user);
       if (!client) {
 
         return res.status(404).json({
+
           message:
             "Client not found",
+
         });
 
       }
@@ -381,8 +422,10 @@ console.log("CLIENT /me USER:", req.user);
       console.log(err);
 
       res.status(500).json({
+
         message:
           "Error fetching profile",
+
       });
 
     }
@@ -395,7 +438,7 @@ console.log("CLIENT /me USER:", req.user);
 ========================================= */
 router.put(
   "/:id",
-  authClient,
+  authMiddleware,
   isAdmin,
   async (req, res) => {
 
@@ -463,8 +506,10 @@ router.put(
       console.log(err);
 
       res.status(500).json({
+
         message:
           "Update failed",
+
       });
 
     }
@@ -477,7 +522,7 @@ router.put(
 ========================================= */
 router.delete(
   "/:id",
-  authClient,
+  authMiddleware,
   isAdmin,
   async (req, res) => {
 
@@ -494,8 +539,10 @@ router.delete(
       if (!client) {
 
         return res.status(404).json({
+
           message:
             "Client not found",
+
         });
 
       }
@@ -532,8 +579,10 @@ router.delete(
       console.log(err);
 
       res.status(500).json({
+
         message:
           "Delete failed",
+
       });
 
     }
@@ -548,8 +597,19 @@ router.post(
   "/logout",
   (req, res) => {
 
+    // =========================
+    // CLEAR ALL TOKENS
+    // =========================
+    res.clearCookie(
+      "adminToken"
+    );
+
     res.clearCookie(
       "clientToken"
+    );
+
+    res.clearCookie(
+      "customerToken"
     );
 
     res.json({
@@ -561,6 +621,5 @@ router.post(
 
   }
 );
-
 
 module.exports = router;
