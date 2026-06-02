@@ -73,265 +73,148 @@ const Topbar = ({ user, setUser }) => {
       }
 
     };
-
+console.log("USER DATA =", user);
   return (
-
     <>
-
       {/* =========================
           TOPBAR
       ========================= */}
       <nav className="topbar">
-
         {/* LEFT */}
         <div className="topbar-left">
-
-          <button
-            className="mobile-toggle"
-            onClick={() =>
-              setMenuOpen(true)
-            }
-          >
-
+          <button className="mobile-toggle" onClick={() => setMenuOpen(true)}>
             <FaBars />
-
           </button>
 
           <h3 className="desktop-title">
-
-            {user?.role === "client"
-              ? "Client Panel"
-              : "Admin Panel"}
-
+            {user?.role === "client" ? "Client Panel" : "Admin Panel"}
           </h3>
-
         </div>
 
         {/* RIGHT */}
         <div className="topbar-right">
-
           {/* NOTIFICATION */}
           <div className="notification">
-
             <FaBell />
 
-            <span className="badge">
-              2
-            </span>
-
+            <span className="badge">2</span>
           </div>
 
           {/* PROFILE */}
           <div className="profile-box">
-
             <FaUserCircle className="profile-icon" />
 
             <div className="profile-details">
+              <h4>{user?.role === "client" ? user?.name : user?.role} </h4>
 
-              <h4>
-                {user?.name || "User"}
-              </h4>
-
-              <p>
-                {user?.role || "Panel"}
-              </p>
-
+              <p>{user?.role || "Panel"}</p>
             </div>
-
           </div>
 
           {/* LOGOUT */}
           {user && (
-
-            <button
-              className="logout-btn"
-              onClick={handleLogout}
-            >
-
+            <button className="logout-btn" onClick={handleLogout}>
               Logout
-
             </button>
-
           )}
-
         </div>
-
       </nav>
 
       {/* =========================
           OVERLAY
       ========================= */}
       {menuOpen && (
-
         <div
           className="mobile-menu-overlay"
-          onClick={() =>
-            setMenuOpen(false)
-          }
+          onClick={() => setMenuOpen(false)}
         ></div>
-
       )}
 
       {/* =========================
           MOBILE MENU
       ========================= */}
-      <div
-        className={`mobile-menu-drawer ${
-          menuOpen ? "open" : ""
-        }`}
-      >
-
+      <div className={`mobile-menu-drawer ${menuOpen ? "open" : ""}`}>
         {/* HEADER */}
         <div className="mobile-menu-header">
+          <h2>Shasa</h2>
 
-          <h2>
-            Shasa
-          </h2>
-
-          <button
-            onClick={() =>
-              setMenuOpen(false)
-            }
-          >
-
+          <button onClick={() => setMenuOpen(false)}>
             <FaTimes />
-
           </button>
-
         </div>
 
         {/* LINKS */}
         <div className="mobile-menu-links">
-
           {/* DASHBOARD */}
-          <NavLink
-            to={baseRoute}
-            end
-            onClick={() =>
-              setMenuOpen(false)
-            }
-          >
-
+          <NavLink to={baseRoute} end onClick={() => setMenuOpen(false)}>
             <FaHome />
 
-            <span>
-              Dashboard
-            </span>
-
+            <span>Dashboard</span>
           </NavLink>
 
           {/* PRODUCTS */}
           <NavLink
             to={`${baseRoute}/products`}
-            onClick={() =>
-              setMenuOpen(false)
-            }
+            onClick={() => setMenuOpen(false)}
           >
-
             <FaBox />
 
-            <span>
-              Products
-            </span>
-
+            <span>Products</span>
           </NavLink>
 
           {/* CLIENT ONLY */}
           {user?.role === "client" && (
-
             <NavLink
               to="/client/add-product"
-              onClick={() =>
-                setMenuOpen(false)
-              }
+              onClick={() => setMenuOpen(false)}
             >
-
               <FaPlus />
 
-              <span>
-                Add Product
-              </span>
-
+              <span>Add Product</span>
             </NavLink>
-
           )}
 
           {/* ORDERS */}
           <NavLink
             to={`${baseRoute}/orders`}
-            onClick={() =>
-              setMenuOpen(false)
-            }
+            onClick={() => setMenuOpen(false)}
           >
-
             <FaReceipt />
 
-            <span>
-              Orders
-            </span>
-
+            <span>Orders</span>
           </NavLink>
 
           {/* ADMIN ONLY */}
           {user?.role === "admin" && (
-
             <>
-
-              <NavLink
-                to="/admin/clients"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
-              >
-
+              <NavLink to="/admin/clients" onClick={() => setMenuOpen(false)}>
                 <FaUsers />
 
-                <span>
-                  Clients
-                </span>
-
+                <span>Clients</span>
               </NavLink>
 
               <NavLink
                 to="/admin/add-client"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
+                onClick={() => setMenuOpen(false)}
               >
-
                 <FaPlus />
 
-                <span>
-                  Add Client
-                </span>
-
+                <span>Add Client</span>
               </NavLink>
 
               <NavLink
                 to="/admin/add-categories"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
+                onClick={() => setMenuOpen(false)}
               >
-
                 <FaLayerGroup />
 
-                <span>
-                  Add Category
-                </span>
-
+                <span>Add Category</span>
               </NavLink>
-
             </>
-
           )}
-
         </div>
-
       </div>
-
     </>
-
   );
 
 };

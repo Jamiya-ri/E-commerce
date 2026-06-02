@@ -7,6 +7,7 @@ import {
   FaTrash,
   FaTags,
   FaPlus,
+  FaEdit,
 } from "react-icons/fa";
 
 import axios from "axios";
@@ -21,6 +22,10 @@ const AddCategory = () => {
   const [categories,
     setCategories] =
     useState([]);
+
+  const [editId,
+    setEditId] =
+    useState(null);
 
   // =========================
   // FETCH CATEGORIES
@@ -55,7 +60,7 @@ const AddCategory = () => {
   }, []);
 
   // =========================
-  // ADD CATEGORY
+  // ADD / UPDATE CATEGORY
   // =========================
   const handleSubmit =
     async (e) => {
@@ -64,23 +69,53 @@ const AddCategory = () => {
 
       try {
 
-        await axios.post(
+        if (editId) {
 
-          "http://localhost:5000/api/categories/add",
+          // UPDATE
 
-          {
-            name,
-          },
+          await axios.put(
 
-          {
-            withCredentials: true,
-          }
+            `http://localhost:5000/api/categories/${editId}`,
 
-        );
+            {
+              name,
+            },
 
-        alert(
-          "Category Added Successfully"
-        );
+            {
+              withCredentials: true,
+            }
+
+          );
+
+          alert(
+            "Category Updated Successfully"
+          );
+
+          setEditId(null);
+
+        } else {
+
+          // ADD
+
+          await axios.post(
+
+            "http://localhost:5000/api/categories/add",
+
+            {
+              name,
+            },
+
+            {
+              withCredentials: true,
+            }
+
+          );
+
+          alert(
+            "Category Added Successfully"
+          );
+
+        }
 
         setName("");
 
@@ -94,7 +129,7 @@ const AddCategory = () => {
 
           err.response?.data?.message ||
 
-          "Error adding category"
+          "Operation Failed"
 
         );
 
@@ -110,9 +145,7 @@ const AddCategory = () => {
 
       const confirmDelete =
         window.confirm(
-
-          "Delete category and all products?"
-
+          "Delete category?"
         );
 
       if (!confirmDelete)
@@ -144,155 +177,142 @@ const AddCategory = () => {
 
     };
 
+  // =========================
+  // EDIT CATEGORY
+  // =========================
+  const handleEdit =
+    (category) => {
+
+      setEditId(
+        category._id
+      );
+
+      setName(
+        category.name
+      );
+
+    };
+
+  // =========================
+  // CANCEL EDIT
+  // =========================
+  const cancelEdit =
+    () => {
+
+      setEditId(null);
+
+      setName("");
+
+    };
+
   return (
+    <div className="category-page">
+      {/* FORM CARD */}
+      <div className="category-form-card">
+        <div className="title-box">
+          <FaTags className="title-icon" />
 
-  <div className="category-page">
+          <h2>Category Management</h2>
+        </div>
 
-    {/* =========================
-        FORM CARD
-    ========================= */}
-    <div className="category-form-card">
+        <form onSubmit={handleSubmit} className="category-form">
+          <input
+            type="text"
+            placeholder="Enter category name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
 
-      <div className="title-box">
-
-        <FaTags className="title-icon" />
-
-        <h2>
-          Category Management
-        </h2>
-
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="category-form"
-      >
-
-        <input
-          type="text"
-          placeholder="Enter category name"
-          value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
-        />
-
-        <button type="submit">
-
-          <FaPlus />
-
-          
-
-        </button>
-
-      </form>
-
-    </div>
-
-    {/* =========================
-        TABLE CARD
-    ========================= */}
-    <div className="category-table-card">
-
-      <div className="title-box">
-
-        <FaTags className="title-icon" />
-
-        <h2>
-          Category List
-        </h2>
-
-      </div>
-
-      <div className="table-wrapper">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>No</th>
-
-              <th>Category</th>
-
-              <th>Action</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {categories.length > 0 ? (
-
-              categories.map(
-                (item, index) => (
-
-                  <tr key={item._id}>
-
-                    <td>
-                      {index + 1}
-                    </td>
-
-                    <td>
-                      {item.name}
-                    </td>
-
-                    <td>
-
-                      <button
-                        className="delete-btn"
-                        onClick={() =>
-                          handleDelete(
-                            item._id
-                          )
-                        }
-                      >
-
-                        <FaTrash />
-
-
-                      </button>
-
-                    </td>
-
-                  </tr>
-
-                )
-              )
-
+          <button type="submit">
+            {editId ? (
+              "Update"
             ) : (
+              <>
+                <FaPlus />
+              </>
+            )}
+          </button>
 
+          {editId && (
+            <button type="button" className="cancel-btn" onClick={cancelEdit}>
+              Cancel
+            </button>
+          )}
+        </form>
+      </div>
+
+      {/* TABLE CARD */}
+      <div className="category-table-card">
+        <div className="title-box">
+          <FaTags className="title-icon" />
+
+          <h2>Category List</h2>
+        </div>
+
+        <div className="table-wrapper">
+          <table>
+            <thead>
               <tr>
+                <th>No</th>
 
-                <td
-                  colSpan="3"
+                <th>Category</th>
+
+                <th
+                  colSpan={2}
                   style={{
-                    textAlign:
-                      "center",
+                    textAlign: "center",
                   }}
                 >
-
-                  No Categories Found
-
-                </td>
-
+                  Actions
+                </th>
               </tr>
+            </thead>
 
-            )}
+            <tbody>
+              {categories.length > 0 ? (
+                categories.map((item, index) => (
+                  <tr key={item._id}>
+                    <td>{index + 1}</td>
 
-          </tbody>
+                    <td>{item.name}</td>
 
-        </table>
-
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(item)}
+                      >
+                        <FaEdit />
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="3"
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    No Categories Found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
     </div>
-
-  </div>
-
-);
+  );
 
 };
 

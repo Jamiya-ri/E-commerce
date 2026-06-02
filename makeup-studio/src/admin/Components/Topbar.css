@@ -363,3 +363,8 @@
     padding: 0 15px;
   }
 }
+.logout-btn{
+    background: #fcdce5;
+    padding:5px;
+    border-radius: 8px;
+}

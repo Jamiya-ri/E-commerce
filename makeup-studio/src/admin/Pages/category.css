@@ -170,3 +170,21 @@ table tr:hover{
   }
 
 }
+.edit-btn {
+  background: orange;
+  border: none;
+  padding: 8px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.cancel-btn {
+  background: gray;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}

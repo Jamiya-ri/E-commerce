@@ -31,50 +31,41 @@ router.post(
 
     try {
 
-      const {
-        name,
-        userId,
-        password,
-        shopName,
-      } = req.body;
+    const { name, userId, password, shopName, email, phone } = req.body;
 
       // =========================
       // VALIDATION
       // =========================
-      if (
-        !name ||
-        !userId ||
-        !password ||
-        !shopName
-      ) {
-
+      if (!name || !userId || !password || !shopName || !email || !phone) {
         return res.status(400).json({
-
-          message:
-            "All fields are required",
-
+          message: "All fields are required",
         });
-
       }
 
       // =========================
       // CHECK EXISTING CLIENT
       // =========================
-      const existingClient =
-        await Client.findOne({
-          userId,
-        });
+     const existingUserId =
+  await Client.findOne({
+    userId,
+  });
 
-      if (existingClient) {
+if (existingUserId) {
+  return res.status(400).json({
+    message: "User ID already exists",
+  });
+}
 
-        return res.status(400).json({
+const existingEmail = await Client.findOne({
+  email,
+  _id: { $ne: req.params.id },
+});
 
-          message:
-            "Client already exists",
-
-        });
-
-      }
+if (existingEmail) {
+  return res.status(400).json({
+    message: "Email already exists",
+  });
+}
 
       // =========================
       // HASH PASSWORD
@@ -88,25 +79,23 @@ router.post(
       // =========================
       // CREATE CLIENT
       // =========================
-      const client =
-        await Client.create({
+      const client = await Client.create({
+        name,
 
-          name,
+        userId,
 
-          userId,
+        email,
 
-          password:
-            hashedPassword,
+        phone,
 
-          plainpassword:
-            password,
+        password: hashedPassword,
 
-          shopName,
+        plainpassword: password,
 
-          createdBy:
-            req.user.id,
+        shopName,
 
-        });
+        createdBy: req.user.id,
+      });
 
       // =========================
       // RESPONSE
@@ -326,6 +315,12 @@ router.post(
 
           shopName:
             client.shopName,
+          
+          email:
+            client.email,
+          
+          phone:
+            client.phone,
 
           role:
             "client",
@@ -353,85 +348,41 @@ router.post(
 /* =========================================
    CLIENT PROFILE
 ========================================= */
-router.get(
-  "/me",
-  authMiddleware,
-  async (req, res) => {
-
-    try {
-
-      // =========================
-      // CHECK ROLE
-      // =========================
-      if (
-        !req.user ||
-        req.user.role !== "client"
-      ) {
-
-        return res.status(403).json({
-
-          message:
-            "Access denied",
-
-        });
-
-      }
-
-      console.log(
-        "CLIENT /me USER:",
-        req.user
-      );
-
-      const client =
-        await Client.findById(
-          req.user.id
-        ).select("-password");
-
-      if (!client) {
-
-        return res.status(404).json({
-
-          message:
-            "Client not found",
-
-        });
-
-      }
-
-      res.json({
-
-        id:
-          client._id,
-
-        name:
-          client.name,
-
-        userId:
-          client.userId,
-
-        shopName:
-          client.shopName,
-
-        role:
-          "client",
-
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== "client") {
+      return res.status(403).json({
+        message: "Access denied",
       });
-
-    } catch (err) {
-
-      console.log(err);
-
-      res.status(500).json({
-
-        message:
-          "Error fetching profile",
-
-      });
-
     }
 
+    const client = await Client.findById(req.user.id).select(
+      "-password -plainpassword",
+    );
+
+    if (!client) {
+      return res.status(404).json({
+        message: "Client not found",
+      });
+    }
+
+    res.json({
+      id: client._id,
+      name: client.name,
+      userId: client.userId,
+      email: client.email,
+      phone: client.phone,
+      shopName: client.shopName,
+      role: "client",
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: "Error fetching profile",
+    });
   }
-);
+});
 
 /* =========================================
    ADMIN - UPDATE CLIENT
@@ -444,12 +395,7 @@ router.put(
 
     try {
 
-      const {
-        name,
-        shopName,
-        userId,
-        password,
-      } = req.body;
+      const { name, userId, password, shopName, email, phone } = req.body;
 
       const updateData = {
 
@@ -458,6 +404,10 @@ router.put(
         shopName,
 
         userId,
+
+        email,
+
+        phone,
 
       };
 
@@ -601,6 +551,7 @@ router.post(
     // CLEAR ALL TOKENS
     // =========================
     res.clearCookie(
+
       "adminToken"
     );
 
