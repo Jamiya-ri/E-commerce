@@ -51,7 +51,8 @@ const orderRoutes = require( "./routes/orderRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const adminOrderRoutes =require("./routes/adminOrderRoutes");
 const clientRoutes = require("./routes/clientRoutes");
-const categoryRoutes =require("./routes/categoryRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 app.use("/api/categories",categoryRoutes);
 app.use("/api/admin", adminRoutes);
@@ -62,6 +63,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/orders", adminOrderRoutes);
 app.use("/api/wishlist",wishlistRoutes);
 app.use("/api/clients", clientRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 
 

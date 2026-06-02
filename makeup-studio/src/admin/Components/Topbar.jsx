@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaBars,
   FaBell,
@@ -19,61 +19,67 @@ import axios from "axios";
 import "./Topbar.css";
 
 const Topbar = ({ user, setUser }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+  const [count, setCount] = useState(0);
 
-  const navigate =
-    useNavigate();
+  const fetchNotifications = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/notifications/count",
+
+        {
+          withCredentials: true,
+        },
+      );
+
+      setCount(res.data.count);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+
+    const interval = setInterval(fetchNotifications, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const navigate = useNavigate();
 
   // =========================
   // BASE ROUTE
   // =========================
-  const baseRoute =
-    user?.role === "client"
-      ? "/client"
-      : "/admin";
-
+  const baseRoute = user?.role === "client" ? "/client" : "/admin";
+gi
   // =========================
   // LOGOUT
   // =========================
-  const handleLogout =
-    async () => {
+  const handleLogout = async () => {
+    try {
+      const logoutUrl =
+        user?.role === "client"
+          ? "http://localhost:5000/api/clients/logout"
+          : "http://localhost:5000/api/admin/logout";
 
-      try {
+      await axios.post(
+        logoutUrl,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
 
-        const logoutUrl =
+      setUser(null);
 
-          user?.role === "client"
-
-            ? "http://localhost:5000/api/clients/logout"
-
-            : "http://localhost:5000/api/admin/logout";
-
-        await axios.post(
-          logoutUrl,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-
-        setUser(null);
-
-        navigate(
-          user?.role === "client"
-            ? "/client/login"
-            : "/admin/login"
-        );
-
-      } catch (err) {
-
-        console.log(err);
-
-      }
-
-    };
-console.log("USER DATA =", user);
+      navigate(user?.role === "client" ? "/client/login" : "/admin/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log("USER DATA =", user);
   return (
     <>
       {/* =========================
@@ -96,8 +102,7 @@ console.log("USER DATA =", user);
           {/* NOTIFICATION */}
           <div className="notification">
             <FaBell />
-
-            <span className="badge">2</span>
+            {count > 0 && <span className="badge">{count}</span>}{" "}
           </div>
 
           {/* PROFILE */}
@@ -216,7 +221,6 @@ console.log("USER DATA =", user);
       </div>
     </>
   );
-
 };
 
 export default Topbar;

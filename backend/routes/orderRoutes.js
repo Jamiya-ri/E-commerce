@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 const User = require("../models/User");
-
+const Notification = require("../models/Notifications");
 const authMiddleware = require("../middleware/authMiddleware");
 
 /* =========================
@@ -139,6 +138,24 @@ router.post(
 
         createdOrders.push(order);
 
+        await Notification.create({
+          userType: "client",
+
+          userId: data.vendorId,
+
+          title: "New Order",
+
+          message: `${customerName || user.name} placed a new order`,
+        });
+
+        await Notification.create({
+          userType: "admin",
+
+          title: "New Order",
+
+          message: `${customerName || user.name} placed a new order`,
+        });
+
       }
 
       // =========================
@@ -220,6 +237,7 @@ router.post(
 
       const order =
         await Order.create({
+          
 
           orderId: customOrderId,
 
@@ -260,7 +278,24 @@ router.post(
           shopName:
             cartItem.productId.shopName,
         });
+      
+await Notification.create({
+  userType: "client",
 
+  userId: cartItem.productId.vendorId,
+
+  title: "New Order",
+
+  message: `${customerName || user?.name || "Customer"} placed a new order`,
+});
+
+await Notification.create({
+  userType: "admin",
+
+  title: "New Order",
+
+  message: `${customerName || user?.name || "Customer"} placed a new order`,
+});
       // REMOVE ITEM FROM CART
       await Cart.findByIdAndDelete(
         req.params.cartId
