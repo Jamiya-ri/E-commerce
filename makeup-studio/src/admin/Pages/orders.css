@@ -224,6 +224,15 @@
   align-items: center;
   z-index: 999;
 }
+.print-order-btn{
+  background: green;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
 /* MODAL */
 .order-modal{

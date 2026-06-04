@@ -53,7 +53,7 @@ const Topbar = ({ user, setUser }) => {
   // BASE ROUTE
   // =========================
   const baseRoute = user?.role === "client" ? "/client" : "/admin";
-gi
+
   // =========================
   // LOGOUT
   // =========================
