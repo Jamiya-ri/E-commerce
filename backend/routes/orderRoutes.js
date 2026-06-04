@@ -143,6 +143,8 @@ router.post(
 
           userId: data.vendorId,
 
+          orderId: order._id,
+
           title: "New Order",
 
           message: `${customerName || user.name} placed a new order`,
@@ -150,6 +152,8 @@ router.post(
 
         await Notification.create({
           userType: "admin",
+
+          orderId: order._id,
 
           title: "New Order",
 
@@ -284,13 +288,18 @@ await Notification.create({
 
   userId: cartItem.productId.vendorId,
 
+  orderId: order._id,
+
   title: "New Order",
 
   message: `${customerName || user?.name || "Customer"} placed a new order`,
 });
 
+      
 await Notification.create({
   userType: "admin",
+
+  orderId: order._id,
 
   title: "New Order",
 

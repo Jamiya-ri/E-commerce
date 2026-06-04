@@ -23,6 +23,22 @@ const Topbar = ({ user, setUser }) => {
 
   const [count, setCount] = useState(0);
 
+  const [notifications, setNotifications] = useState([]);
+
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const fetchNotificationList = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/notifications", {
+        withCredentials: true,
+      });
+
+      setNotifications(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const fetchNotifications = async () => {
     try {
       const res = await axios.get(
@@ -39,13 +55,40 @@ const Topbar = ({ user, setUser }) => {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
+  fetchNotifications();
+
+  fetchNotificationList();
+
+  const interval = setInterval(() => {
     fetchNotifications();
 
-    const interval = setInterval(fetchNotifications, 5000);
+    fetchNotificationList();
+  }, 5000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, []);
+
+  
+  
+  const markAsRead = async (id) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/notifications/read/${id}`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      fetchNotifications();
+
+      fetchNotificationList();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   const navigate = useNavigate();
 
@@ -100,7 +143,33 @@ const Topbar = ({ user, setUser }) => {
         {/* RIGHT */}
         <div className="topbar-right">
           {/* NOTIFICATION */}
-          <div className="notification">
+          <div
+            className="notification"
+            onClick={() => setShowNotifications(!showNotifications)}
+          >
+            {showNotifications && (
+              <div className="notification-dropdown">
+                {notifications.length > 0 ? (
+                  notifications.map((n) => (
+                    <div
+                      key={n._id}
+                      className={`notification-item ${!n.read ? "unread" : ""}`}
+                      onClick={async () => {
+                        await markAsRead(n._id);
+
+                        navigate(`${baseRoute}/orders`);
+                      }}
+                    >
+                      <h5>{n.title}</h5>
+
+                      <p>{n.message}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No Notifications</p>
+                )}
+              </div>
+            )}
             <FaBell />
             {count > 0 && <span className="badge">{count}</span>}{" "}
           </div>

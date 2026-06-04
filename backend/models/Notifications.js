@@ -11,6 +11,11 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
     },
 
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    },
+
     title: String,
 
     message: String,
@@ -24,5 +29,4 @@ const notificationSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
-
 module.exports = mongoose.model("Notification", notificationSchema);
