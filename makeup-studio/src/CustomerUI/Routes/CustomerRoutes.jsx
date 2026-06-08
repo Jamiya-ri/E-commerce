@@ -18,6 +18,7 @@ import Auth from "../Pages/auth";
 import Orders from "../Pages/orders";
 import Wishlist from "../Pages/wishlist";
 import CategoryProducts from "../Pages/categoryproducts"
+import ProductDetails from "../Pages/productdetails";
 
 const CustomerRoutes = () => {
   return (
@@ -29,15 +30,13 @@ const CustomerRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/products/:category" element={<CategoryProducts />}
-/>
+          <Route path="/product/:id" element={<ProductDetails />}/>
+          <Route path="/our-zones/:category" element={<CategoryProducts />}/>
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
-
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/wishlist" element={<Wishlist />}

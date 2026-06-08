@@ -26,10 +26,8 @@ const Wishlist = () => {
             await axios.get(
               "http://localhost:5000/api/wishlist",
               {
-                headers: {
-                  authorization:
-                    window.token,
-                },
+                    withCredentials: true,
+
               }
             );
 
@@ -58,10 +56,8 @@ const Wishlist = () => {
         await axios.delete(
           `http://localhost:5000/api/wishlist/${id}`,
           {
-            headers: {
-              authorization:
-                window.token,
-            },
+               withCredentials: true,
+
           }
         );
 
@@ -96,10 +92,8 @@ const Wishlist = () => {
           },
 
           {
-            headers: {
-              authorization:
-                window.token,
-            },
+                withCredentials: true,
+
           }
         );
 
@@ -142,8 +136,9 @@ const Wishlist = () => {
 
           ) : (
 
-            wishlist.map((item) => (
-
+wishlist
+  .filter((item) => item.productId)
+  .map((item) => (
               <div
                 className="col-lg-3 col-md-6"
                 key={item._id}
@@ -195,7 +190,7 @@ const Wishlist = () => {
                           )
                         }
                       >
-                        Add To Cart
+                        Add to Cart
                       </button>
 </div>
 <div className="col-md-6">

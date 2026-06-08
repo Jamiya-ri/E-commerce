@@ -256,3 +256,16 @@
         font-size: 2.2rem;
     }
 }
+.product-card {
+  transition: 0.3s;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+}

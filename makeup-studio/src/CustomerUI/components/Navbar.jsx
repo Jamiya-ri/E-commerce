@@ -122,13 +122,29 @@ const Navbar = () => {
             </li>
 
             {/* PRODUCTS */}
+
+            {/* PRODUCTS */}
+<li className="nav-item">
+  <NavLink
+    to="/products"
+    onClick={closeNavbar}
+    className={({ isActive }) =>
+      isActive
+        ? "customer-link sketch-hover customer-active"
+        : "customer-link sketch-hover"
+    }
+  >
+    Products
+  </NavLink>
+</li>
+
             <li className="nav-item dropdown">
               <NavLink
-                to="/products"
+                to="/our-zones"
                 className="customer-link sketch-hover dropdown-toggle"
                 data-bs-toggle="dropdown"
               >
-                Products
+                Our Zones
               </NavLink>
 
               <ul className="dropdown-menu customer-dropdown">
@@ -136,7 +152,7 @@ const Navbar = () => {
                   <li key={index}>
                     <NavLink
                       className="customer-dropdown-item"
-                      to={`/products/${cat}`}
+                      to={`/our-zones/${cat}`}
                     >
                       {cat}
                     </NavLink>

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./product.css";
 import Productgirl from '../assets/pro.jpg';
 
@@ -17,6 +18,23 @@ const FloatingLeaves = () => {
 };
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/products"
+      );
+
+      setProducts(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchProducts();
+}, []);
   return (
     <>
 
@@ -124,11 +142,10 @@ const Products = () => {
         </div>
 
       </section>
-<section className="category-section">
+<section className="category-section py-5">
 
   <div className="container">
 
-    {/* TITLE */}
     <div className="text-center mb-5">
 
       <h2 className="category-title">
@@ -144,69 +161,57 @@ const Products = () => {
 
     <div className="row g-4">
 
-      {/* SKINCARE */}
-      <div className="col-lg-6">
+      {products.map((product) => (
 
-        <div className="category-card">
+        <div
+          className="col-lg-3 col-md-4 col-sm-6"
+          key={product._id}
+        >
 
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsEmYyakXszXGmeum4x2PFvqpsLb6tU4CrQg&s"           alt="skincare"
-            className="category-img"
-          />
+          <div className="card h-100 shadow border-0 product-card">
 
-          <div className="category-overlay">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="card-img-top"
+              style={{
+                height: "250px",
+                objectFit: "cover"
+              }}
+            />
 
-            <h3>Skincare</h3>
+            <div className="card-body d-flex flex-column">
 
-            <p>
-              Gentle skincare essentials for healthy,
-              glowing, and naturally radiant skin.
-            </p>
+              <h5 className="card-title">
+                {product.name}
+              </h5>
 
-            <Link
-              to="/products/skincare"
-              className="btn"
-            >
-              View Skincare
-            </Link>
+              <p className="text-muted small">
+                {product.category}
+              </p>
 
-          </div>
+              <p className="card-text flex-grow-1">
+                {product.description?.slice(0, 80)}...
+              </p>
 
-        </div>
+              <h6 className="fw-bold mb-3">
+                ₹{product.price}
+              </h6>
 
-      </div>
+              <Link
+                to={`/product/${product._id}`}
+                className="btn btn-dark w-100"
+              >
+                View Product
+              </Link>
 
-      {/* MAKEUP */}
-      <div className="col-lg-6">
-
-        <div className="category-card">
-
-          <img
-            src="https://png.pngtree.com/background/20230427/original/pngtree-many-different-types-of-makeup-products-on-a-black-background-picture-image_2495945.jpg"           alt="makeup"
-            className="category-img"
-          />
-
-          <div className="category-overlay">
-
-            <h3>Makeup</h3>
-
-            <p>
-              Elegant makeup products crafted for
-              everyday beauty and confidence.
-            </p>
-
-            <Link
-              to="/products/makeup"
-              className="btn"
-            >
-              View Makeup
-            </Link>
+            </div>
 
           </div>
 
         </div>
 
-      </div>
+      ))}
 
     </div>
 
