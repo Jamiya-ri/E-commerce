@@ -1,0 +1,239 @@
+/* HERO SECTION */
+.makeup-hero{
+     min-height: 100vh;
+
+    background-image:
+    /* linear-gradient(
+        rgba(0,0,0,0.75),
+        rgba(0,0,0,0.75)
+    ), */
+    url("../assets/makeup2.jfif");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    overflow: hidden;
+    padding: 120px 20px 100px;
+
+
+    
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .makeup-hero {
+        padding: 0 10px;
+        text-align: center;
+    }
+}
+
+
+/* GLOW EFFECT */
+.glow-circle{
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+}
+
+.glow-1{
+    top: 20%;
+    left: 10%;
+    width: 250px;
+    height: 250px;
+    background: rgba(255,192,203,0.12);
+}
+
+.glow-2{
+    bottom: 10%;
+    right: 10%;
+    width: 220px;
+    height: 220px;
+    background: rgba(255,182,193,0.12);
+}
+
+/* FLOATING LEAVES */
+.floating-leaves{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.leaf{
+    position: absolute;
+    width: 20px;
+    height: 12px;
+    background: #f8cdd8;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.7;
+    animation: fall 10s linear infinite;
+}
+
+@keyframes fall{
+
+    0%{
+        transform: translateY(-10%) rotate(0deg);
+        opacity: 0;
+    }
+
+    50%{
+        opacity: 0.7;
+    }
+
+    100%{
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.leaf-1{ left:5%; animation-delay:0s; }
+.leaf-2{ left:20%; animation-delay:2s; }
+.leaf-3{ left:35%; animation-delay:4s; }
+.leaf-4{ left:50%; animation-delay:1s; }
+.leaf-5{ left:65%; animation-delay:3s; }
+.leaf-6{ left:80%; animation-delay:5s; }
+.leaf-7{ left:45%; animation-delay:6s; }
+.leaf-8{ left:75%; animation-delay:7s; }
+
+
+
+/* WAVE */
+.wave-divider{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    line-height: 0;
+}
+
+.wave-divider svg{
+    width: 100%;
+    height: 100px;
+}
+
+/* makeupproductS SECTION */
+.makeupproducts-section{
+    background: #fcdce5;
+}
+
+/* makeupproduct CARD */
+.makeupproduct-card{
+    background: white;
+    border-radius: 25px;
+    overflow: hidden;
+    transition: 0.4s;
+    height: 100%;
+}
+
+.makeupproduct-card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* IMAGE */
+.makeupproduct-img-wrapper{
+    position: relative;
+    overflow: hidden;
+}
+
+.makeupproduct-img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: 0.5s;
+}
+
+.makeupproduct-card:hover .makeupproduct-img{
+    transform: scale(1.08);
+}
+
+/* WISHLIST */
+.makeupwishlist-btn{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: white;
+    color: #f78da7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CONTENT */
+.makeupproduct-content{
+    padding: 20px;
+}
+
+/* RATING */
+.makeuprating{
+    color: gold;
+    margin-bottom: 10px;
+}
+
+/* PRICE */
+.makeupprice{
+    color: #f78da7;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* CART BUTTON */
+.makeupcart-btn{
+    width: 100%;
+    background: black;
+    color: #fcdce5;
+    border: none;
+    padding: 12px;
+    border-radius: 40px;
+    font-weight: 600;
+    transition: 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.makeupcart-btn:hover{
+    background: #f8b6c8;
+    color: black;
+}
+
+/* RESPONSIVE */
+@media(max-width:991px){
+
+    .makeup-hero{
+        text-align: center;
+        padding-top: 140px;
+    }
+
+    
+}
+
+@media(max-width:768px){
+
+    
+
+    .makeupproduct-img{
+        height: 240px;
+    }
+
+    .wave-divider svg{
+        height: 60px;
+    }
+
+    .makeup-hero h1{
+        font-size: 2.5rem;
+    }
+}
